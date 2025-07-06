@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+
+<Circle fx:id="checkerPiece" radius="32.0" stroke="#00000048" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="2.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ishim.checkers.Controller.CheckerPieceController">
+    <fill>
+        <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+            <stops>
+                <Stop>
+                    <color>
+                        <Color red="0.6399999856948853" green="0.24959999322891235" blue="0.42063239216804504" opacity="0.8199999928474426" />
+                    </color>
+                </Stop>
+                <Stop offset="0.006711409395973154">
+                    <color>
+                        <Color red="0.6399999856948853" green="0.24959999322891235" blue="0.42063239216804504" opacity="0.8199999928474426" />
+                    </color>
+                </Stop>
+                <Stop offset="0.7818791946308725">
+                    <color>
+                        <Color red="0.46052631735801697" green="0.11939571052789688" blue="0.19899284839630127" opacity="0.9200000166893005" />
+                    </color>
+                </Stop>
+            <Stop offset="1.0">
+               <color>
+                  <Color red="0.46000000834465027" green="0.20239999890327454" blue="0.20239999890327454" opacity="0.7290076613426208" />
+               </color>
+            </Stop>
+            </stops>
+        </RadialGradient>
+    </fill>
+</Circle>
