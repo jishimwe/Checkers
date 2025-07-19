@@ -4,34 +4,53 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import org.ishim.checkers.CheckerBoardState;
 import org.ishim.checkers.CheckersApp;
+import org.ishim.checkers.PieceState;
+import org.ishim.checkers.Player;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class DamController implements Initializable {
+
+    private CheckerBoardState boardState;
 
     @FXML
     private GridPane damPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        boardState = CheckerBoardState.getInstance();
+
+        damPanel.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
+
+            System.out.println("Mouse released >> What can I do? x:" + e.getX() + " y:" + e.getY());
+        });
+
+        damPanel.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
+            System.out.println("Mouse moved >> x:" + e.getX() + " y:" + e.getY());
+        });
+
         GridPane.setFillHeight(damPanel,  true);
         GridPane.setFillWidth(damPanel,  true);
         damPanel.setPadding(new Insets(4));
 
+        setNewGameBoardState();
+        System.out.println("Board set up");
+    }
+
+    private void setNewGameBoardState() {
         char[] c = {'0', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',  'K', 'L', 'M'};
         for (int i = 1; i < damPanel.getColumnCount(); i++) {
             Label lbl = new Label();
@@ -51,7 +70,7 @@ public class DamController implements Initializable {
                 } else {
                     if (i < 5 || i > 6) {
                         FXMLLoader piece = new FXMLLoader(CheckersApp.class.getResource("fxml/CheckerPiece.fxml"));
-                        Scene sc;
+//                        Scene sc;
 /*                        try {
                             sc = new Scene(piece.load(), 800.0/12, 800.0/12);
                         } catch (IOException e) {
@@ -78,6 +97,14 @@ public class DamController implements Initializable {
 //                            circle.setFill(effect1);
                             circle.setFill(i > 5 ? effect1 : effect2);
                             damPanel.add(circle, j, i);
+
+                            circle.setOnDragDropped(e -> {
+                                Dragboard db = e.getDragboard();
+                                System.out.println("Dropped");
+                            });
+
+                            boardState.getBoardSet().add(new PieceState(circle, j, i, i > 5 ? Player.WHITE : Player.BLACK));
+
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -85,5 +112,30 @@ public class DamController implements Initializable {
                 }
             }
         }
+        boardState.setCurrentPlayer(Player.WHITE);
+        damPanel.toBack();
+    }
+
+    public CheckerBoardState getBoardState() {
+        return boardState;
+    }
+
+    public void setBoardState(CheckerBoardState boardState) {
+        this.boardState = boardState;
+    }
+
+    public int getGridPaneX(double width, double mouseX) {
+        return getCordXY(width, mouseX);
+    }
+
+    public int getGridPaneY(double height, double mouseY) {
+        return getCordXY(height, mouseY);
+    }
+
+    private static int getCordXY(double a, double b) {
+        if (b < a*0.04)
+            return 0;
+        double d = a*0.096;
+        return (int) (b/d);
     }
 }
